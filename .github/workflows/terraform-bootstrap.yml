@@ -2,18 +2,6 @@ name: Terraform Bootstrap
 
 on:
   workflow_dispatch:
-    options:
-      environment:
-        description: "Environment to bootstrap"
-        required: true
-        default: "sandbox"
-        type: choice
-        choices:
-          - sandbox
-          - ci
-          - test
-          - staging
-          - prod
 
 permissions:
   id-token: write
@@ -37,6 +25,31 @@ jobs:
       - name: Verify AWS identity
         run: aws sts get-caller-identity
 
+      - name: Create bootstrap state bucket
+        run: |
+          if aws s3api head-bucket \
+            --bucket platform-engineering-bootstrap-state 2>/dev/null; then
+            echo "Bootstrap state bucket already exists"
+          else
+            aws s3api create-bucket \
+              --bucket platform-engineering-bootstrap-state \
+              --region eu-west-2 \
+              --create-bucket-configuration LocationConstraint=eu-west-2
+          fi
+
+      - name: Enable bootstrap bucket versioning
+        run: |
+          aws s3api put-bucket-versioning \
+            --bucket platform-engineering-bootstrap-state \
+            --versioning-configuration Status=Enabled
+
+      - name: Block public access
+        run: |
+          aws s3api put-public-access-block \
+            --bucket platform-engineering-bootstrap-state \
+            --public-access-block-configuration \
+              BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -46,7 +59,7 @@ jobs:
         working-directory: terraform/bootstrap
         run: terraform init
 
-      - name: Terraform Format Check
+      - name: Terraform Format
         working-directory: terraform/bootstrap
         run: terraform fmt -check
 
