@@ -3,7 +3,7 @@ terraform {
     bucket         = "platform-engineering-bootstrap-state"
     key            = "terraform/bootstrap.tfstate"
     region         = "eu-west-2"
-    dynamodb_table = "platform-engineering-terraform-locks"
     encrypt        = true
   }
 }
+
