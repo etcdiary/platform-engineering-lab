@@ -3,16 +3,6 @@ name: Terraform Bootstrap
 on:
   workflow_dispatch:
 
-
-  push:
-    branches:
-      - "feature/**"
-    paths:
-      - "terraform/platform/**"
-      - "terraform/modules/**"
-      - ".github/workflows/sandbox.yml"
-
-
 permissions:
   id-token: write
   contents: read
@@ -34,8 +24,6 @@ jobs:
 
       - name: Verify AWS identity
         run: aws sts get-caller-identity
-        with:
-          role-to-assume: arn:aws:iam::058264480534:role/github-platform-sandbox
 
       - name: Create bootstrap state bucket
         run: |
