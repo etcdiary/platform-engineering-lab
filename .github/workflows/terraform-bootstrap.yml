@@ -59,6 +59,10 @@ jobs:
         working-directory: terraform/bootstrap
         run: terraform init
 
+      - name: Terraform import
+        working-directory: terraform/bootstrap
+        run: terraform import aws_s3_bucket.terraform_state platform-engineering-terraform-state
+
       - name: Terraform Format
         working-directory: terraform/bootstrap
         run: terraform fmt -check
