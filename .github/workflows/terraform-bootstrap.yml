@@ -3,6 +3,16 @@ name: Terraform Bootstrap
 on:
   workflow_dispatch:
 
+
+  push:
+    branches:
+      - "feature/**"
+    paths:
+      - "terraform/platform/**"
+      - "terraform/modules/**"
+      - ".github/workflows/sandbox.yml"
+
+
 permissions:
   id-token: write
   contents: read
