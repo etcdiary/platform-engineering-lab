@@ -57,13 +57,8 @@ jobs:
 
       - name: Terraform Init
         working-directory: terraform/bootstrap
-        run: terraform init
+        run: terraform init 
 
-      - name: Terraform import
-        working-directory: terraform/bootstrap
-        run: terraform import aws_s3_bucket.terraform_state platform-engineering-terraform-state
-
-    
       - name: Terraform Validate
         working-directory: terraform/bootstrap
         run: terraform validate
