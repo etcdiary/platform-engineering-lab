@@ -55,9 +55,29 @@ jobs:
         with:
           terraform_version: 1.5.7
 
+      
+
       - name: Terraform Init
         working-directory: terraform/bootstrap
         run: terraform init
+     
+      - name: Debug platform state bucket
+        run: |
+          echo "=== AWS Identity ==="
+          aws sts get-caller-identity
+
+          echo "=== Bucket lookup ==="
+          aws s3api head-bucket \
+            --bucket platform-engineering-terraform-state
+
+          echo "=== Bucket region ==="
+          aws s3api get-bucket-location \
+            --bucket platform-engineering-terraform-state
+
+          echo "=== Bucket list ==="
+          aws s3api list-buckets \
+            --query "Buckets[?Name=='platform-engineering-terraform-state'].Name" \
+            --output text
 
       - name: Remove stale bootstrap bucket from Terraform state
         working-directory: terraform/bootstrap
