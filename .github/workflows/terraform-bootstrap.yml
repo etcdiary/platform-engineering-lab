@@ -59,23 +59,24 @@ jobs:
         working-directory: terraform/bootstrap
         run: terraform init
 
-      - name: Import existing bootstrap resources
+      - name: Remove stale bootstrap bucket from state
         working-directory: terraform/bootstrap
         run: |
           if terraform state list | grep -q '^aws_s3_bucket.terraform_state$'; then
-            echo "S3 state bucket already managed"
+            terraform state rm aws_s3_bucket.terraform_state
+          else
+            echo "No stale S3 bucket resource found in state"
+          fi
+
+      - name: Import Terraform state bucket
+        working-directory: terraform/bootstrap
+        run: |
+          if terraform state list | grep -q '^aws_s3_bucket.terraform_state$'; then
+            echo "Terraform state bucket already managed"
           else
             terraform import \
               aws_s3_bucket.terraform_state \
-             platform-engineering-bootstrap-state
-          fi
-
-          if terraform state list | grep -q '^aws_dynamodb_table.terraform_locks$'; then
-            echo "DynamoDB lock table already managed"
-          else
-            terraform import \
-              aws_dynamodb_table.terraform_locks \
-              platform-engineering-terraform-locks
+              platform-engineering-terraform-state
           fi
 
       - name: Terraform Validate
