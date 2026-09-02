@@ -57,7 +57,26 @@ jobs:
 
       - name: Terraform Init
         working-directory: terraform/bootstrap
-        run: terraform init 
+        run: terraform init
+
+      - name: Import existing bootstrap resources
+        working-directory: terraform/bootstrap
+        run: |
+          if terraform state list | grep -q '^aws_s3_bucket.terraform_state$'; then
+            echo "S3 state bucket already managed"
+          else
+            terraform import \
+              aws_s3_bucket.terraform_state \
+              platform-engineering-terraform-state
+          fi
+
+          if terraform state list | grep -q '^aws_dynamodb_table.terraform_locks$'; then
+            echo "DynamoDB lock table already managed"
+          else
+            terraform import \
+              aws_dynamodb_table.terraform_locks \
+              platform-engineering-terraform-locks
+          fi
 
       - name: Terraform Validate
         working-directory: terraform/bootstrap
