@@ -43,58 +43,28 @@ jobs:
             --bucket platform-engineering-bootstrap-state \
             --versioning-configuration Status=Enabled
 
+      - name: Enable bootstrap bucket encryption
+        run: |
+          aws s3api put-bucket-encryption \
+            --bucket platform-engineering-bootstrap-state \
+            --server-side-encryption-configuration \
+            '{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+
       - name: Block public access
         run: |
           aws s3api put-public-access-block \
             --bucket platform-engineering-bootstrap-state \
             --public-access-block-configuration \
-              BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
+            BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.5.7
 
-      
-
       - name: Terraform Init
         working-directory: terraform/bootstrap
-        run: terraform init
-     
-      - name: Debug platform state bucket
-        run: |
-          echo "=== AWS Identity ==="
-          aws sts get-caller-identity
-
-          echo "=== Bucket lookup ==="
-          aws s3api head-bucket \
-            --bucket platform-engineering-terraform-state
-
-          echo "=== Bucket region ==="
-          aws s3api get-bucket-location \
-            --bucket platform-engineering-terraform-state
-
-          echo "=== Bucket list ==="
-          aws s3api list-buckets \
-            --query "Buckets[?Name=='platform-engineering-terraform-state'].Name" \
-            --output text
-
-      - name: Remove stale bootstrap bucket from Terraform state
-        working-directory: terraform/bootstrap
-        run: |
-          terraform state rm aws_s3_bucket.terraform_state || true
-
-      - name: Import platform Terraform state bucket
-        working-directory: terraform/bootstrap
-        run: |
-          terraform import \
-            aws_s3_bucket.terraform_state \
-            platform-engineering-terraform-state
-
-      - name: Verify Terraform state
-        working-directory: terraform/bootstrap
-        run: |
-          terraform state show aws_s3_bucket.terraform_state
+        run: terraform init -reconfigure
 
       - name: Terraform Validate
         working-directory: terraform/bootstrap
