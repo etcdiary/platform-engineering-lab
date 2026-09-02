@@ -59,25 +59,22 @@ jobs:
         working-directory: terraform/bootstrap
         run: terraform init
 
-      - name: Remove stale bootstrap bucket from state
+      - name: Remove stale bootstrap bucket from Terraform state
         working-directory: terraform/bootstrap
         run: |
-          if terraform state list | grep -q '^aws_s3_bucket.terraform_state$'; then
-            terraform state rm aws_s3_bucket.terraform_state
-          else
-            echo "No stale S3 bucket resource found in state"
-          fi
+          terraform state rm aws_s3_bucket.terraform_state || true
 
-      - name: Import Terraform state bucket
+      - name: Import platform Terraform state bucket
         working-directory: terraform/bootstrap
         run: |
-          if terraform state list | grep -q '^aws_s3_bucket.terraform_state$'; then
-            echo "Terraform state bucket already managed"
-          else
-            terraform import \
-              aws_s3_bucket.terraform_state \
-              platform-engineering-terraform-state
-          fi
+          terraform import \
+            aws_s3_bucket.terraform_state \
+            platform-engineering-terraform-state
+
+      - name: Verify Terraform state
+        working-directory: terraform/bootstrap
+        run: |
+          terraform state show aws_s3_bucket.terraform_state
 
       - name: Terraform Validate
         working-directory: terraform/bootstrap
