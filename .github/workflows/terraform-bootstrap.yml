@@ -67,7 +67,7 @@ jobs:
           else
             terraform import \
               aws_s3_bucket.terraform_state \
-              platform-engineering-terraform-state
+             platform-engineering-bootstrap-state
           fi
 
           if terraform state list | grep -q '^aws_dynamodb_table.terraform_locks$'; then
