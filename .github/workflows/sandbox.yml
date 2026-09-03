@@ -24,22 +24,22 @@ permissions:
   id-token: write
   contents: read
 
-concurrency:
-  group: terraform-sandbox
-  cancel-in-progress: false
-
 jobs:
   terraform:
-    name: Terraform Sandbox
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: terraform/platform
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::058264480534:role/github-platform-sandbox
+          aws-region: eu-west-2
+
+      - name: Verify AWS identity
+        run: aws sts get-caller-identity
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
