@@ -31,3 +31,8 @@ variable "memory_size" {
   type        = number
   default     = 256
 }
+
+variable "execution_role_arn" {
+  description = "ARN of the Lambda execution role"
+  type        = string
+}

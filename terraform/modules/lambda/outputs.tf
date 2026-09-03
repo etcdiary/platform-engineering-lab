@@ -7,5 +7,5 @@ output "function_arn" {
 }
 
 output "execution_role_arn" {
-  value = aws_iam_role.this.arn
+  value = var.execution_role_arn
 }

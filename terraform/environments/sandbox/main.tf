@@ -8,4 +8,11 @@ module "notification_lambda" {
 
   function_name = "platform-notification"
   filename      = "../../../lambda/notification/notification.zip"
+  execution_role_arn = module.notification_iam.role_arn  
+}
+
+module "notification_iam" {
+  source = "../../modules/iam"
+
+  role_name = "platform-notification-execution-role"
 }
