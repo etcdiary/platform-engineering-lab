@@ -60,3 +60,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
         run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: terraform/environments/sandbox
+        run: terraform apply -auto-approve
