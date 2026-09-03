@@ -46,28 +46,17 @@ jobs:
         with:
           terraform_version: 1.16.0
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::058264480534:role/github-platform-sandbox
-          aws-region: eu-west-2
-
-      - name: Verify AWS identity
-        run: aws sts get-caller-identity
-
-      - name: Terraform Format
-        run: terraform fmt -check -recursive
+      - name: Verify Terraform version
+        run: terraform version
 
       - name: Terraform Init
-        working-directory: terraform/bootstrap
+        working-directory: terraform/environments/sandbox
         run: terraform init -reconfigure
 
       - name: Terraform Validate
+        working-directory: terraform/environments/sandbox
         run: terraform validate
 
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
         run: terraform plan
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve tfplan
