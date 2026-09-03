@@ -3,8 +3,9 @@ provider "aws" {
   allowed_account_ids = ["058264480534"]
 }
 
-module "terraform_state" {
-  source = "../../modules/s3-state"
+module "notification_lambda" {
+  source = "../../modules/lambda"
 
-  bucket_name   = "platform-engineering-module-test-058264480534"
+  function_name = "platform-notification"
+  filename      = "../../../lambda/notification/notification.zip"
 }
