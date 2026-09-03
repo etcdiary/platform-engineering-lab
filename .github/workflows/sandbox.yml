@@ -1,6 +1,16 @@
 name: Sandbox Terraform
 
 on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to deploy to"
+        required: true
+        default: "sandbox"
+        type: choice
+        options:
+          - "sandbox"
+
   push:
     branches:
       - "feature/**"
@@ -8,6 +18,7 @@ on:
       - "terraform/platform/**"
       - "terraform/modules/**"
       - ".github/workflows/sandbox.yml"
+      - "terraform/environments/sandbox/**"
 
 permissions:
   id-token: write
