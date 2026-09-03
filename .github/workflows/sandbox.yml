@@ -73,8 +73,8 @@ jobs:
         run: |
           terraform plan \
             -out=tfplan \
-            -var="aws_region=${{ secrets.AWS_REGION }}" \
-            -var="environment=${{ github.event.inputs.environment }}"
+            -var="aws_region=${{ secrets.AWS_REGION }}" 
+            
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
