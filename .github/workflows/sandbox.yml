@@ -51,7 +51,7 @@ jobs:
 
       - name: Terraform Init
         working-directory: terraform/environments/sandbox
-        run: terraform init -reconfigure
+        run: terraform init 
 
       - name: Terraform Validate
         working-directory: terraform/environments/sandbox
