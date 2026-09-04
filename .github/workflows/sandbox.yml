@@ -73,7 +73,7 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform/environments/sandbo
+        working-directory: terraform/environments/sandbox
 
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
