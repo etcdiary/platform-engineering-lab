@@ -9,11 +9,11 @@ crash.*.log
 # Terraform variable files containing secrets
 *.secret.tfvars
 secrets.tfvars
-
+terraform.tfvars
 # Environment files
 .env
 .env.*
 !.env.example
 
 # macOS
-.DS_Store
+.DS_Storeterraform.tfvars

@@ -36,3 +36,8 @@ variable "execution_role_arn" {
   description = "ARN of the Lambda execution role"
   type        = string
 }
+variable "environment_variables" {
+  description = "Environment variables to set on the Lambda function"
+  type        = map(string)
+  default     = {}
+}

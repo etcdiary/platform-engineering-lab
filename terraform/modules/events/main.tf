@@ -60,3 +60,44 @@ resource "aws_iam_role_policy" "publisher_putevents" {
     ]
   })
 }
+resource "aws_iam_role_policy" "consumer_sqs" {
+  name = "${var.queue_name}-consume"
+  role = var.consumer_role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ]
+        Resource = aws_sqs_queue.this.arn
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "consumer_ses" {
+  name = "${var.queue_name}-send-email"
+  role = var.consumer_role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "ses:SendEmail"
+        Resource = var.ses_sender_identity_arn
+      }
+    ]
+  })
+}
+
+resource "aws_lambda_event_source_mapping" "sqs_to_processor" {
+  event_source_arn = aws_sqs_queue.this.arn
+  function_name    = var.consumer_lambda_arn
+  batch_size       = 5
+}

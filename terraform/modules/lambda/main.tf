@@ -11,6 +11,10 @@ resource "aws_lambda_function" "this" {
 
   timeout     = var.timeout
   memory_size = var.memory_size
+
+  environment {
+    variables = var.environment_variables
+}
 }
 resource "aws_cloudwatch_log_group" "notification" {
   name              = "/aws/lambda/${aws_lambda_function.this.function_name}"
