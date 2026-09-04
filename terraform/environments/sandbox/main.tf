@@ -34,13 +34,13 @@ module "notification_events" {
   source = "../../modules/events"
 
   bus_name                = "platform-notification-bus"
-  queue_name               = "platform-notification-queue"
-  event_source             = "platform.notification"
-  event_detail_type        = "NotificationRequested"
-  publisher_role_name      = module.notification_iam.role_name
-  consumer_role_name       = module.notification_consumer_iam.role_name
-  consumer_lambda_arn      = module.notification_processor_lambda.function_arn
-  ses_sender_identity_arn  = "arn:aws:ses:eu-west-2:058264480534:identity/${var.sender_email}"
+  queue_name              = "platform-notification-queue"
+  event_source            = "platform.notification"
+  event_detail_type       = "NotificationRequested"
+  publisher_role_name     = module.notification_iam.role_name
+  consumer_role_name      = module.notification_consumer_iam.role_name
+  consumer_lambda_arn     = module.notification_processor_lambda.function_arn
+  ses_sender_identity_arn = "arn:aws:ses:eu-west-2:058264480534:identity/${var.sender_email}"
 }
 
 module "notification_consumer_iam" {

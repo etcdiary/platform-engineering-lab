@@ -14,7 +14,7 @@ resource "aws_lambda_function" "this" {
 
   environment {
     variables = var.environment_variables
-}
+  }
 }
 resource "aws_cloudwatch_log_group" "notification" {
   name              = "/aws/lambda/${aws_lambda_function.this.function_name}"

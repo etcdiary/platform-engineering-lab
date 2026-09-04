@@ -57,10 +57,18 @@ jobs:
         working-directory: terraform/environments/sandbox
         run: terraform validate
 
+  terraform-plan:
+    runs-on: ubuntu-latest
+    needs: terraform
+    steps:
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
         run: terraform plan
 
+  terraform-apply:
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    steps:
       - name: Terraform Apply
         working-directory: terraform/environments/sandbox
         run: terraform apply -auto-approve
