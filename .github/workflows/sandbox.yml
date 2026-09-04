@@ -78,13 +78,14 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
         run: terraform plan -out=tfplan
+        env:
+          TF_VAR_sender_email: ${{ vars.SENDER_EMAIL }}
+          TF_VAR_recipient_email: ${{ vars.RECIPIENT_EMAIL }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: tfplan
           path: terraform/environments/sandbox/tfplan
-        env:
-          TF_VAR_sender_email: ${{ vars.SENDER_EMAIL }}
-          TF_VAR_recipient_email: ${{ vars.RECIPIENT_EMAIL }}
 
   apply:
     runs-on: ubuntu-latest
