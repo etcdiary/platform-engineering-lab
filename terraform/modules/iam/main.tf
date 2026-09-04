@@ -35,7 +35,7 @@ resource "aws_iam_role_policy" "lambda_logging" {
           "logs:PutLogEvents"
         ]
 
-        Resource = "*"
+        Resource = "arn:aws:logs:eu-west-2:058264480534:log-group:/aws/lambda/platform-notification:*"
       }
     ]
   })
