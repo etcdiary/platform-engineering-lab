@@ -78,7 +78,7 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform/environments/sandbox
         run: terraform plan -out=tfplan
-        use: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         env:
           TF_VAR_sender_email: ${{ vars.SENDER_EMAIL }}
           TF_VAR_recipient_email: ${{ vars.RECIPIENT_EMAIL }}
