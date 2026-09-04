@@ -1,0 +1,24 @@
+variable "bus_name" {
+  description = "Name of the custom EventBridge bus"
+  type        = string
+}
+
+variable "queue_name" {
+  description = "Name of the SQS queue that receives matched events"
+  type        = string
+}
+
+variable "event_source" {
+  description = "Value matched in the EventBridge rule's 'source' field"
+  type        = string
+}
+
+variable "event_detail_type" {
+  description = "Value matched in the EventBridge rule's 'detail-type' field"
+  type        = string
+}
+
+variable "publisher_role_name" {
+  description = "IAM role name of the Lambda that will publish events"
+  type        = string
+}
