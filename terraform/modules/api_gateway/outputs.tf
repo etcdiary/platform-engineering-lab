@@ -1,0 +1,8 @@
+output "api_endpoint" {
+  description = "Invoke URL for the API stage"
+  value       = "${aws_apigatewayv2_api.this.api_endpoint}/${aws_apigatewayv2_stage.this.name}"
+}
+
+output "api_id" {
+  value = aws_apigatewayv2_api.this.id
+}

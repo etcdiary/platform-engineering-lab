@@ -16,3 +16,13 @@ module "notification_iam" {
 
   role_name = "platform-notification-execution-role"
 }
+
+module "notification_api" {
+  source = "../../modules/api_gateway"
+
+  api_name             = "platform-notification-api"
+  lambda_invoke_arn    = module.notification_lambda.invoke_arn
+  lambda_function_name = module.notification_lambda.function_name
+  route_key            = "POST /notify"
+  stage_name            = "sandbox"
+}

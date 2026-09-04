@@ -9,3 +9,6 @@ output "function_arn" {
 output "execution_role_arn" {
   value = var.execution_role_arn
 }
+output "invoke_arn" {
+  value = aws_lambda_function.this.invoke_arn
+}
