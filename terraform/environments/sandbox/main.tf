@@ -2,6 +2,11 @@ provider "aws" {
   region              = "eu-west-2"
   allowed_account_ids = ["058264480534"]
 }
+provider "aws" {
+  alias  = "us_east_1"
+  region = "us-east-1"
+  allowed_account_ids = ["058264480534"]
+}
 
 module "notification_lambda" {
   source = "../../modules/lambda"
@@ -60,4 +65,21 @@ module "notification_processor_lambda" {
     SENDER_EMAIL    = var.sender_email
     RECIPIENT_EMAIL = var.recipient_email
   }
+}
+module "notification_waf" {
+  source = "../../modules/waf"
+
+  providers = {
+    aws.us_east_1 = aws.us_east_1
+  }
+
+  name = "platform-notification-waf"
+}
+
+module "notification_cloudfront" {
+  source = "../../modules/cloudfront"
+
+  api_domain_name = module.notification_api.api_domain_only
+  stage_name      = "sandbox"
+  web_acl_arn     = module.notification_waf.web_acl_arn
 }

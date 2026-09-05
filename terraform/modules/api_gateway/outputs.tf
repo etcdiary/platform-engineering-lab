@@ -10,3 +10,7 @@ output "api_id" {
 # output "invoke_arn" {
 #   value = aws_lambda_function.this.invoke_arn
 # }
+
+output "api_domain_only" {
+  value = replace(aws_apigatewayv2_api.this.api_endpoint, "https://", "")
+}
