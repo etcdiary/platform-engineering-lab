@@ -90,7 +90,10 @@ resource "aws_iam_role_policy" "consumer_ses" {
       {
         Effect   = "Allow"
         Action   = "ses:SendEmail"
-        Resource = var.ses_sender_identity_arn
+        Resource = [
+          var.ses_sender_identity_arn,
+          "arn:aws:ses:eu-west-2:058264480534:configuration-set/my-first-configuration-set"
+        ]
       }
     ]
   })
